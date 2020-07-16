@@ -1,4 +1,3 @@
-import React, {useState} from "react";
 import React, { useState, useEffect } from "react";
 import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
@@ -7,7 +6,6 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, TextArea, FormBtn } from "../components/Form";
-import API from "../../utils/API"
 
 function Search() {
   const [books, setBooks] = useState([])
@@ -54,7 +52,7 @@ function Search() {
         <Row>
           <Col size="md-6">
             <Jumbotron>
-              <h1>What Books Should I Read?</h1>
+              <h1>Look for books!</h1>
             </Jumbotron>
             <form>
               <Input
