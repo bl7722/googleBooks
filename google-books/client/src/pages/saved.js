@@ -1,49 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
-import Jumbotron from "../components/Jumbotron";
+import React, { Component } from "react";
 import API from "../utils/API";
+import Jumbotron from "../components/Jumbotron";
+import { Container} from "../components/Grid";
+import SavedReturn from "../components/savedReturn"
 
-function Saved(props) {
-  
-  const [book, setBook] = useState({})
-  const {id} = useParams()
-  
-  useEffect(() => {
-    API.getBook(id)
-      .then(res => setBook(res.data))
-      .catch(err => console.log(err));
-  }, [])
+class SaveBook extends Component {
+    state = {
+        savedBooks: []
+    };
 
-  return (
-      <Container fluid>
-        <Row>
-          <Col size="md-12">
-            <Jumbotron>
-              <h1>
-                {book.title} by {book.author}
-              </h1>
-            </Jumbotron>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-10 md-offset-1">
-            <article>
-              <h1>Description</h1>
-              <p>
-                {book.description}
-              </p>
-            </article>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-2">
-            <Link to="/">← Back to Authors</Link>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+    componentDidMount() {
+        API.getBooks()
+            .then(res => this.setState({ savedBooks: res.data }))
+            .catch(err => console.log(err))
+    }
+
+    render() {
+        return (
+            <Container fluid className="container">
+                <Jumbotron />
+                <Container>
+                    <SavedReturn savedBooks={this.state.savedBooks} handleDeleteButton={this.handleDeleteButton} />
+                </Container>
+            </Container>
+        )
+    }
+}
 
 
-export default Saved;
+
+export default SaveBook 

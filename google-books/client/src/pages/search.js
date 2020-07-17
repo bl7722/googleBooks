@@ -1,86 +1,89 @@
-import React, { useState, useEffect } from "react";
-import Jumbotron from "../components/Jumbotron";
+import React, { Component } from "react";
 import API from "../utils/API";
-import { Col, Row, Container } from "../components/Grid";
-import { Input, FormBtn } from "../components/Form";
+import Jumbotron from "../components/Jumbotron";
+import { Container, Row, Col } from "../components/Grid";
+import SearchInput from "../components/searchInput";
+import SearchReturn from "../components/searchReturn"
 
-function Search() {
-  const [books, setBooks] = useState([])
-  const [formObject, setFormObject] = useState({})
 
-  useEffect(() => {
-    loadBooks()
-  }, [])
+class SearchBooks extends Component {
+    //create state
+    state = {
+        search: "",
+        books: [],
+        error: "",
+        message: ""
+    };
 
-  function loadBooks() {
-    API.getBooks()
-      .then(res => 
-        setBooks(res.data)
-      )
-      .catch(err => console.log(err));
-  };
-
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
-
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormObject({...formObject, [name]: value})
-  };
-
-  function handleFormSubmit(event) {
-    event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        description: formObject.description
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
+    //function to take value of what enter in the search bar
+    handleInputChange = event => {
+        this.setState({ search: event.target.value })
     }
-  };
 
-    return (
-      <Container fluid>
-        <Row>
-          <Col size="md-6">
-            <Jumbotron>
-              <h1>Look for books!</h1>
-            </Jumbotron>
-            <form>
-              <Input
-                onChange={handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                onChange={handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <FormBtn
-                disabled={!(formObject.author && formObject.title)}
-                onClick={handleFormSubmit}
-              >
-                Submit Book
-              </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books on Shelf</h1>
-            </Jumbotron>
-              <h3>Nothing to Show</h3>
+    //function to control the submit button of the search form 
+    handleFormSubmit = event => {
+        event.preventDefault();
+        // once it clicks it connects to the google book api with the search value
+        API.getGoogleSearchBooks(this.state.search)
+            .then(res => {
+                if (res.data.items === "error") {
+                    throw new Error(res.data.items);
+                }
+                else {
+                    // store response in a array
+                    let results = res.data.items
+                    //map through the array 
+                    results = results.map(result => {
+                        //store each book information in a new object 
+                        result = {
+                            id: result.id,
+                            title: result.volumeInfo.title,
+                            author: result.volumeInfo.authors,
+                            description: result.volumeInfo.description,
+                            image: result.volumeInfo.imageLinks.thumbnail,
+                            link: result.volumeInfo.infoLink
+                        }
+                        return result;
+                    })
+                    // reset the sate of the empty books array to the new arrays of objects with properties geting back from the response
+                    this.setState({ books: results, error: "" })
+                }
+            })
+            .catch(err => this.setState({ error: err.items }));
+    }
 
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+    handleSavedButton = event => {
+        // console.log(event)
+        event.preventDefault();
+        console.log(this.state.books)
+        let savedBooks = this.state.books.filter(book => book.id === event.target.id)
+        savedBooks = savedBooks[0];
+    }
+    render() {
+        return (
+            <Container fluid>
+                <Jumbotron>
+                    <h1 className="text-white">Book Search! </h1>
+                </Jumbotron>
+                <Container>
+                    <Row>
+                        <Col size="12">
+                            <SearchInput
+                                handleFormSubmit={this.handleFormSubmit}
+                                handleInputChange={this.handleInputChange}
+                            />
+                        </Col>
+                    </Row>
+                </Container>
+                <br></br>
+                <Container>
+                    <SearchReturn books={this.state.books} handleSavedButton={this.handleSavedButton} />
+                </Container>
+            </Container>
+        )
+    }
 
 
-export default Search;
+}
+
+export default SearchBooks;

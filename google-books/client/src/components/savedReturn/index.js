@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css"
+
 import {Row, Col} from "../Grid"
 
 const SavedReturn = props => {
@@ -40,7 +40,7 @@ const SavedReturn = props => {
                                 <Row className="buttonDiv ">
                                     <a href={savedbook.link} target="_blank">
                                         <button className="viewBook btn btn-success">
-                                            View Book
+                                            View Books
                                         </button>
                                     </a>
                                 </Row>
