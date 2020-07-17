@@ -17,7 +17,7 @@ class SaveBook extends Component {
 
     render() {
         return (
-            <Container fluid className="container">
+            <Container fluid>
                 <Jumbotron />
                 <Container>
                     <SavedReturn savedBooks={this.state.savedBooks} handleDeleteButton={this.handleDeleteButton} />

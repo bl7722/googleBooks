@@ -4,10 +4,10 @@ import React from "react";
 const SearchInput = props => {
     return (
         <form>
-            <div className="form-group">
-                <label className="BookSearchLabel"><h3>Search Here</h3></label>
+            <div>
+                <h3>Search Here</h3>
                 <br></br>
-                <input className="col-12 form-control"
+                <input
                     value={props.search}
                     type="text"
                     name="searchBook"
@@ -15,7 +15,7 @@ const SearchInput = props => {
                     onChange={props.handleInputChange}
                 />
             </div>
-            <button type="submit" className="submitBtn btn btn-primary" onClick={props.handleFormSubmit}>
+            <button type="submit" onClick={props.handleFormSubmit}>
                 Submit
             </button>
         </form>
