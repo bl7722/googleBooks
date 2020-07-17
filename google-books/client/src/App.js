@@ -10,12 +10,9 @@ function App() {
       <div>
         <Nav />
         <Switch>
-          <Route exact path={["/", "/books"]}>
-            <Search />
-          </Route>
-          <Route exact path="/books/:id">
-            <Saved />
-          </Route>
+          <Route exact path="/" component={Search} />
+          <Route exact path="/books" component={Search} />
+          <Route exact path="/books/:id" component={Saved} />
         </Switch>
       </div>
     </Router>
