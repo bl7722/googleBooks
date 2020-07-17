@@ -5,6 +5,7 @@ import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 
 function Saved(props) {
+  
   const [book, setBook] = useState({})
   const {id} = useParams()
   
@@ -28,9 +29,9 @@ function Saved(props) {
         <Row>
           <Col size="md-10 md-offset-1">
             <article>
-              <h1>Synopsis</h1>
+              <h1>Description</h1>
               <p>
-                {book.synopsis}
+                {book.description}
               </p>
             </article>
           </Col>

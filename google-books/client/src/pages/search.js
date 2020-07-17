@@ -5,7 +5,7 @@ import API from "../utils/API";
 import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import { Input, FormBtn } from "../components/Form";
 
 function Search() {
   const [books, setBooks] = useState([])
@@ -40,7 +40,7 @@ function Search() {
       API.saveBook({
         title: formObject.title,
         author: formObject.author,
-        synopsis: formObject.synopsis
+        description: formObject.description
       })
         .then(res => loadBooks())
         .catch(err => console.log(err));
@@ -65,11 +65,6 @@ function Search() {
                 name="author"
                 placeholder="Author (required)"
               />
-              <TextArea
-                onChange={handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
               <FormBtn
                 disabled={!(formObject.author && formObject.title)}
                 onClick={handleFormSubmit}
@@ -80,7 +75,7 @@ function Search() {
           </Col>
           <Col size="md-6 sm-12">
             <Jumbotron>
-              <h1>Books On My List</h1>
+              <h1>Books on Shelf</h1>
             </Jumbotron>
             {books.length ? (
               <List>
@@ -96,7 +91,7 @@ function Search() {
                 ))}
               </List>
             ) : (
-              <h3>No Results to Display</h3>
+              <h3>Nothing to Show</h3>
             )}
           </Col>
         </Row>

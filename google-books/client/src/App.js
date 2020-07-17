@@ -16,8 +16,6 @@ function App() {
           <Route exact path="/books/:id">
             <Saved />
           </Route>
-          <Route>
-          </Route>
         </Switch>
       </div>
     </Router>
